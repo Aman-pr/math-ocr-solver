@@ -34,6 +34,7 @@ The **Math Problem Solver** is a web-based application that allows users to capt
      ```python
      genai.configure(api_key="YOUR_API_KEY")
      ```
+     read GET_GOOGLE_API.md for more 
 
 4. Run the Flask app:
     ```bash
