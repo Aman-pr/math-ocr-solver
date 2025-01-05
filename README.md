@@ -1,0 +1,1 @@
+# math-ocr-solver
