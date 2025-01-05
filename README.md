@@ -71,7 +71,7 @@ The frontend is designed with HTML, CSS, and JavaScript:
 ## Screenshots
 
 ### Interface Overview
-![Math Problem Solver Interface](oie_cNdZ7k5409KR.png)
+![Math Problem Solver Interface](Style/oie_cNdZ7k5409KR.png)
 
 ---
 
