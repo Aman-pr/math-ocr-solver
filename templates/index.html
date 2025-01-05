@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Problem Solver</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="floating-shapes"></div>
+    <div class="container">
+        <div class="header-container">
+            <h1>Math Problem Solver <i class="fas fa-square-root-alt"></i></h1>
+            <p class="subtitle">Capture & Solve Mathematical Problems Instantly</p>
+        </div>
+        <div class="camera-container">
+            <div class="camera-overlay">
+                <div class="corner-lines top-left"></div>
+                <div class="corner-lines top-right"></div>
+                <div class="corner-lines bottom-left"></div>
+                <div class="corner-lines bottom-right"></div>
+            </div>
+            <video id="video" autoplay height=600 width=800></video>
+            <canvas id="canvas" height=210 width=320></canvas>
+            <br>
+            <button id="capture"><i class="fas fa-camera"></i> Capture Image</button>
+        </div>
+        <div class="solution-wrapper">
+            <p id="solution"></p>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>Point your camera at a math problem and click capture</p>
+        <div class="footer-icons">
+            <i class="fas fa-calculator"></i>
+            <i class="fas fa-plus"></i>
+            <i class="fas fa-divide"></i>
+            <i class="fas fa-equals"></i>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
