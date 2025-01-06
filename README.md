@@ -22,8 +22,8 @@ Visit Us : https://hosting.pythonanywhere.com/
 ### Steps
 1. Clone the repository from GitHub:
     ```bash
-    git clone https://github.com/yourusername/VirtualMath.git
-    cd VirtualMath
+    git clone https://github.com/yourusername/math-ocr-solver
+    cd math-ocr-solver
     ```
 
 2. Install required Python packages:
