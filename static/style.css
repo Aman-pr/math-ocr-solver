@@ -98,7 +98,7 @@ h1::after {
     padding: 30px;
     border-radius: 20px;
     margin: 20px auto;
-    width: fit-content;
+    width: 500x;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -153,10 +153,12 @@ video {
     border-radius: 10px;
     margin: 20px 0;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    max-width: 90%;
-    height: auto;
+    width: 600px; /* Set a specific width */
+    height: 300px; /* Set a specific height */
     transition: transform 0.3s ease;
+    object-fit: cover; /* Ensures the content fits nicely */
 }
+
 
 button {
     padding: 12px 30px;
@@ -201,7 +203,7 @@ button:active {
 #solution {
     margin: 20px auto;
     font-size: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    background: white;
     border-radius: 15px;
     padding: 25px;
     backdrop-filter: blur(10px);
@@ -213,6 +215,22 @@ button:active {
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
+#youtube-link {
+    margin: 20px auto;
+    font-size: 20px;
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 720px;
+    color: white;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 
 .footer {
     margin-top: auto;
