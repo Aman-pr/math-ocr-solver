@@ -2,24 +2,25 @@ const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const captureButton = document.getElementById("capture");
 const solutionElement = document.getElementById("solution");
-const youtubeLinkElement = document.getElementById("youtube-link");  // Add this line
+const youtubeLinkElement = document.getElementById("youtube-link");
 const flash = document.createElement('div');
 const ResetMe = document.getElementById("ResetMe");
+const flipCameraButton = document.getElementById("flip-camera");
+
 flash.className = 'flash-effect';
 document.body.appendChild(flash);
 
 let stream = null; // Store stream in global variable
+let currentFacingMode = "environment"; // Start with back camera (environment)
 
+// Function to speak the solution
 function speakSolution(solution) {
-    // Check if the Web Speech API is supported
     if ("speechSynthesis" in window) {
         const utterance = new SpeechSynthesisUtterance(`The solution is ${solution}`);
         utterance.lang = "en-US"; // Set the language
-        utterance.pitch = 1;      // Set the pitch (0 to 2)
-        utterance.rate = 1;       // Set the speed (0.1 to 10)
-        utterance.volume = 1;     // Set the volume (0 to 1)
-
-        // Speak the text
+        utterance.pitch = 1;      // Set the pitch
+        utterance.rate = 1;       // Set the speed
+        utterance.volume = 1;     // Set the volume
         window.speechSynthesis.speak(utterance);
     } else {
         console.error("Web Speech API is not supported in this browser.");
@@ -34,23 +35,23 @@ function playShutterSound() {
 }
 
 // Access the user's webcam
-navigator.mediaDevices.getUserMedia({ video: true })
-    .then((mediaStream) => {
-        stream = mediaStream; // Save stream reference
-        video.srcObject = stream;
-        video.play();
-    })
-    .catch((error) => {
-        console.error("Error accessing webcam:", error);
-        alert("Could not access the webcam. Please allow webcam access.");
-    });
+function startWebcam(facingMode = "user") {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
+        .then((mediaStream) => {
+            stream = mediaStream; // Save stream reference
+            video.srcObject = stream;
+            video.play();
+        })
+        .catch((error) => {
+            console.error("Error accessing webcam:", error);
+            alert("Could not access the webcam. Please allow webcam access.");
+        });
+}
 
 // Function to stop the webcam
 function stopWebcam() {
     if (stream) {
-        stream.getTracks().forEach(track => {
-            track.stop();
-        });
+        stream.getTracks().forEach(track => track.stop());
         video.srcObject = null;
         stream = null;
     }
@@ -58,7 +59,6 @@ function stopWebcam() {
 
 // Capture the image and send it to the Flask backend
 captureButton.addEventListener("click", () => {
-    // Play camera effect
     flash.style.display = 'block';
     playShutterSound();
     setTimeout(() => {
@@ -70,31 +70,25 @@ captureButton.addEventListener("click", () => {
     canvas.height = video.videoHeight;
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Stop the webcam immediately after capturing
     stopWebcam();
 
-    // Show calculating message
     solutionElement.textContent = "Please wait, calculating...";
     solutionElement.style.color = "blue";
 
-    // Convert canvas to image blob
     canvas.toBlob((blob) => {
         const formData = new FormData();
         formData.append("image", blob, "math_problem.jpg");
 
-        // Send image to Flask backend
         fetch("/process-image", {
             method: "POST",
             body: formData,
         })
             .then((response) => response.json())
             .then((data) => {
-                // Remove asterisks from the solution
                 const cleanSolution = data.solution.replace(/\*/g, '\n');
                 solutionElement.textContent = `Solution: \n ${cleanSolution}`;
                 solutionElement.style.color = "green";
 
-                // Display YouTube link if available
                 if (data.youtube_reference) {
                     youtubeLinkElement.textContent = `YouTube Reference: ${data.youtube_reference}`;
                     youtubeLinkElement.style.color = "blue";
@@ -103,7 +97,6 @@ captureButton.addEventListener("click", () => {
                     youtubeLinkElement.style.color = "red";
                 }
 
-                // Speak the solution
                 speakSolution(cleanSolution);
             })
             .catch((error) => {
@@ -114,12 +107,23 @@ captureButton.addEventListener("click", () => {
     });
 });
 
+// Flip camera functionality
+flipCameraButton.addEventListener("click", () => {
+    stopWebcam(); // Stop the current webcam
+
+    // Toggle between front and rear cameras
+    currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+
+    startWebcam(currentFacingMode); // Restart webcam with the new facing mode
+});
+
 ResetMe.addEventListener("click", () => {
-    // Stop ongoing speech synthesis
     if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
     }
 
-    // Reload the webpage
     window.location.reload();
 });
+
+// Start the webcam with the rear camera initially
+startWebcam(currentFacingMode);
