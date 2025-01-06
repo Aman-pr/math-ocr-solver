@@ -33,7 +33,7 @@ The **Math Problem Solver** is a web-based application that allows users to capt
    - Replace the placeholder in `app.py`:
      ```python
      genai.configure(api_key="YOUR_API_KEY")
-     ```
+     ``
      - read GET_GOOGLE_API.md for more info 
 
 4. Run the Flask app:
@@ -44,7 +44,7 @@ The **Math Problem Solver** is a web-based application that allows users to capt
 5. Open the application in your browser at [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
 ---
-
+n
 ## Usage
 1. Access the web app.
 2. Use your device's camera to point at a math problem.
@@ -72,7 +72,7 @@ The frontend is designed with HTML, CSS, and JavaScript:
 ## Screenshots
 
 ### Interface Overview
-![Math Problem Solver Interface](Static/oie_cNdZ7k5409KR.png)
+![Math Problem Solver Interface](static/oie_cNdZ7k5409KR.png)
 
 ---
 
