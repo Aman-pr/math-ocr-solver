@@ -44,7 +44,7 @@ The **Math Problem Solver** is a web-based application that allows users to capt
 5. Open the application in your browser at [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
 ---
-n
+
 ## Usage
 1. Access the web app.
 2. Use your device's camera to point at a math problem.
