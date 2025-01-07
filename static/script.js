@@ -6,6 +6,8 @@ const youtubeLinkElement = document.getElementById("youtube-link");
 const flash = document.createElement('div');
 const ResetMe = document.getElementById("ResetMe");
 const flipCameraButton = document.getElementById("flip-camera");
+const manualQuestionInput = document.getElementById("manualQuestion");
+const submitManualButton = document.getElementById("submitManual");
 
 flash.className = 'flash-effect';
 document.body.appendChild(flash);
@@ -33,7 +35,43 @@ function playShutterSound() {
     const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2Fg4J9gIOFiIqHh4eBfX99goaPkpGQjoySm5ybmpybnaGjoKGgoaGlqamsrq6urq6vsbKysrGvsK6urq6urq2pop+bmpiTjYeBfHZwamRfW1ZRTEhFQj82LysoJSIgHE1mlJmaloNvdoSTloZ6eYSOk5OQjoyMjpCRlpmZm5ycoKampqyrqrG0tbW1tLW1trW1trW2tLW1tLSysK2ppKCbl5KMiYR/fXp5dXNxcG9tbGtramppY1BNR0A5Mi0oIhwXEg4KBwQCAQEBAQEBAQEBAgICAwMDAwMDAwMDAgICAgEBAQAAAAAAAAEBAQEBAQEAAAAAAAAAAAAAAAABAQEBAgICAgICAgEBAQEBAQEBAQEBAQEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAQEBAQEBAQEBAQEBAgICAyxTg4yMhHpxc32IjohvcnqFjo2JhoODhYeJjI2Oj5CQlZmcnZ2enqGjpaWmpqaoqaqqqquqq6qqqainpqShn5yZlZKOioaEgoB+fXt6eXh4d3d3d3h2blZMRT4zLCYhGxYRDQoHBAIBAQEBAQEBAgICAgMDAwMDAwQDAwMDAgICAgEBAQAAAAAAAAEBAQEBAQEAAAAAAAAAAAAAAAABAQEBAgICAgICAgEBAQEBAQEBAQEBAQEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAgICAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAA=');
     audio.play();
 }
+/*Function for Manual question typing */    
+submitManualButton.addEventListener("click", () => {
+    const question = manualQuestionInput.value.trim();
+    if (!question) {
+        alert("Please type a question before submitting.");
+        return;
+    }
 
+    solutionElement.textContent = "Please wait, calculating...";
+    solutionElement.style.color = "blue";
+
+    fetch("/process-manual-question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            solutionElement.textContent = `Solution: ${data.solution}`;
+            solutionElement.style.color = "green";
+
+            if (data.youtube_reference) {
+                youtubeLinkElement.textContent = `YouTube Reference: ${data.youtube_reference}`;
+                youtubeLinkElement.style.color = "blue";
+            } else {
+                youtubeLinkElement.textContent = "No YouTube reference found.";
+                youtubeLinkElement.style.color = "red";
+            }
+
+            speakSolution(data.solution);
+        })
+        .catch((error) => {
+            console.error("Error processing the manual question:", error);
+            solutionElement.textContent = "Error processing the manual question.";
+            solutionElement.style.color = "red";
+        });
+});
 // Access the user's webcam
 function startWebcam(facingMode = "user") {
     navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
