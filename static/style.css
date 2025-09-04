@@ -92,6 +92,28 @@ h1::after {
     background: linear-gradient(90deg, transparent, #fff, transparent);
 }
 
+/*Manual question typing button*/
+
+.manual-question {
+    margin: 20px auto;
+    font-size: 20px;
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 720px;
+    color: rgb(20, 17, 17);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.manual-question:hover
+    {
+    transform: scale(1.02);
+}
+
 /* Camera Container Styling */
 .camera-container {
     background: rgba(0, 0, 0, 0.2);
