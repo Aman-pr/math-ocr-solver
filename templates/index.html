@@ -1,52 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Problem Solver</title>
-    <link rel="stylesheet" href="../static/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MathFlow - Problem Solver</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/style.css" />
+
+    <!-- MathJax: renders LaTeX like $...$, $$...$$, \frac{}{} etc. -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
 </head>
 <body>
-    <div class="floating-shapes"></div>
-    <div class="container">
-        <div class="header-container">
-            <h1>Math Problem Solver <i class="fas fa-square-root-alt"></i></h1>
-            <p class="subtitle">Capture & Solve Mathematical Problems Instantly</p>
-        </div>
-        <div class="camera-container">
-            <div class="camera-overlay">
-                <div class="corner-lines top-left"></div>
-                <div class="corner-lines top-right"></div>
-                <div class="corner-lines bottom-left"></div>
-                <div class="corner-lines bottom-right"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>MathFlow</h1>
+                <p class="tagline">SOLVE&nbsp;·&nbsp;LEARN&nbsp;·&nbsp;UNDERSTAND</p>
             </div>
-            <video id="video" autoplay width="600" height="200"></video>
-            <canvas id="canvas" height="210" width="320"></canvas>
-            <br>
-            <button id="capture"><i class="fas fa-camera"></i> Capture Image</button>
-            <button id="ResetMe">Reset</button>
-            <button id="flip-camera" class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-md hover:bg-blue-600 focus:outline-none">
-            🔄
-            </button>
-            <input class="manual-question" type="text" id="manualQuestion"  placeholder="Type your question manually">
-            <button id="submitManual">Submit Question</button>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" id="home">
+        <div class="hero-content">
+
+            <div class="hero-text">
+                <h2>Your personal math tutor</h2>
+                <p>Capture a problem or type it in. Get a worked solution with clear reasoning, read aloud, with a video walkthrough alongside it.</p>
+            </div>
+
+            <!-- Camera & Upload Area -->
+            <div class="solver-card camera-card hero-camera-card">
+                <div class="card-header">
+                    <span class="card-number">STEP&nbsp;01</span>
+                    <h3>Capture or upload</h3>
+                </div>
+
+                <div class="camera-frame">
+                    <video id="video" playsinline></video>
+                    <canvas id="canvas" style="display:none;"></canvas>
+                    <div id="cameraPlaceholder" class="camera-placeholder">
+                        <p>Camera is off. Turn it on to capture a problem, or upload a photo instead.</p>
+                        <button id="startCamera" class="btn btn--primary">Turn on camera</button>
+                    </div>
+                </div>
+
+                <div class="camera-controls">
+                    <button id="capture" class="btn btn--primary" disabled>Capture problem</button>
+                    <button id="flip-camera" class="btn btn--secondary">Flip camera</button>
+                    <button id="uploadPhoto" class="btn btn--secondary">Upload photo</button>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none;" />
+                </div>
+            </div>
 
         </div>
-        <div class="solution-wrapper">
-            <p id="solution"></p>
-            <p id="youtube-link"></p> <!-- Added YouTube Link Section -->
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Solver Section -->
+        <section class="solver-section">
+
+            <!-- Manual Input Area -->
+            <div class="solver-card input-card wide-card">
+                <div class="card-header">
+                    <span class="card-number">STEP&nbsp;02</span>
+                    <h3>Or type your problem</h3>
+                </div>
+
+                <div class="manual-entry manual-entry--inline">
+                    <input type="text" id="manualQuestion" placeholder="e.g., 2x + 5 = 10, ∫x² dx, or 5³ + 2²" />
+                    <button id="submitManual" class="btn btn--primary">Solve</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <div class="results-container">
+
+                <!-- Solution Display -->
+                <div class="solution-card">
+                    <div class="card-header">
+                        <span class="card-number">STEP&nbsp;03</span>
+                        <h3>Solution</h3>
+                    </div>
+                    <div id="solution" class="solution">
+                        <p style="color: var(--ink-faint); font-family: var(--font-body); font-size: 0.9rem;">Your solution will appear here.</p>
+                    </div>
+                </div>
+
+                <!-- Video Walkthrough -->
+                <div class="solution-card">
+                    <div class="card-header">
+                        <span class="card-number">STEP&nbsp;04</span>
+                        <h3>Video walkthrough</h3>
+                    </div>
+                    <div id="youtube-link" class="video-slot">
+                        <p>A video walkthrough will appear here.</p>
+                    </div>
+                    <button id="generateVideoBtn" class="btn btn--secondary" style="display:none; margin-top: var(--space-lg);">
+                        Generate walkthrough video
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section" id="features">
+            <div class="section-header">
+                <h2>How it works</h2>
+                <p>Three simple steps to master any problem.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-number">01 — CAPTURE</span>
+                    <h4>Capture</h4>
+                    <p>Use your camera to photograph any math problem — algebra, calculus, geometry, statistics, and more.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-number">02 — SOLVE</span>
+                    <h4>Solve</h4>
+                    <p>Get an instant step-by-step solution with clear explanations. Hear the answer read aloud.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-number">03 — LEARN</span>
+                    <h4>Learn</h4>
+                    <p>Watch a personalized video walkthrough to understand the reasoning behind every step.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reset Button -->
+        <section class="footer-actions">
+            <button id="ResetMe" class="btn btn--reset">Start over</button>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>MathFlow</h5>
+                <p>Making mathematics accessible and intuitive for everyone.</p>
+            </div>
+            <div class="footer-section">
+                <h5>Features</h5>
+                <ul>
+                    <li><a href="#">Camera capture</a></li>
+                    <li><a href="#">Step-by-step solutions</a></li>
+                    <li><a href="#">Video explanations</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h5>Support</h5>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-    <footer class="footer">
-        <p>Point your camera at a math problem and click capture</p>
-        <div class="footer-icons">
-            <i class="fas fa-calculator"></i>
-            <i class="fas fa-plus"></i>
-            <i class="fas fa-divide"></i>
-            <i class="fas fa-equals"></i>
+        <div class="footer-bottom">
+            <p>&copy; 2026 MathFlow. All rights reserved.</p>
         </div>
     </footer>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script src="/static/script.js?v=4"></script>
 </body>
 </html>
