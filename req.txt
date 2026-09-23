@@ -4,3 +4,4 @@ python-multipart
 jinja2
 groq
 python-dotenv
+requests
