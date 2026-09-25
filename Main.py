@@ -32,7 +32,7 @@ YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 MODEL_NAME = "qwen/qwen3.8-27b"
 
 # Project 2 (video generator) base URL
-PROJECT2_URL = os.getenv("PROJECT2_URL", "http://localhost:8001")
+PROJECT2_URL = os.getenv("PROJECT2_URL")
 
 
 @app.get("/", response_class=HTMLResponse)
